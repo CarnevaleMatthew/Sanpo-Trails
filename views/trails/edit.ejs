@@ -1,0 +1,93 @@
+<% layout('layouts/boiler') %>
+
+    <h1 class="text-center">Edit your trail</h1>
+
+<div class="row">
+        <div class="col-6 offset-3 mb-4">
+            <form action="/trails/<%= foundTrail._id %>?_method=PUT" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
+            <div class="mb-3">
+              <label class="form-label" for="title">Title</label>
+              <input
+                class="form-control"
+                type="text"
+                name="trail[title]"
+                id="title"
+                required
+                value="<%= foundTrail.title %>" 
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="location">Location</label>
+              <input
+                class="form-control"
+                type="text"
+                name="trail[location]"
+                id="location"
+                required
+                value="<%= foundTrail.location %>"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="images" class="form-label">Add Image(s)</label>
+              <input class="form-control" type="file" name="image" id="images" multiple>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="difficulty">Difficulty</label>
+              <input
+                class="form-control"
+                type="number"
+                name="trail[difficulty]"
+                id="difficulty"
+                min="1"
+                max="5"
+                required
+                value="<%= foundTrail.difficulty %>"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="description">Description</label>
+              <textarea
+                class="form-control"
+                name="trail[description]"
+                id="description"
+                cols="30"
+                rows="5"
+                required
+              ><%= foundTrail.description %></textarea>
+            </div>
+
+    <h5> Delete Images </h5>
+    <div class="row row-cols-1 row-cols-md-4 g-4 mb-3">
+                <% foundTrail.images.forEach((image, i) => { %>
+                    <div class="col">
+                        <div class="card">
+                            <img class="card-img" src="<%= image.thumbnail %>" alt="">
+                            <div class="card-img-overlay text-end pt-1 pe-2">
+                                <label class="visually-hidden" for="image-<%= i %>">Delete Image</label>
+                                <input class="form-check-input" type="checkbox" name="deleteImages[]" value="<%= image.filename %>"  id="image-<%= i %>">
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+            <!-- <div class="mb-3">
+              <% foundTrail.images.forEach(function(img, i) { %> 
+                <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="">
+                <div class="form-check-inline">
+                  <input type="checkbox" id="image-<%= i %>" name="deleteImages[]" value="<%= img.filename %>">
+                </div>
+                <label for="image-<%= i %>">Delete?</label>
+              <% }) %> 
+            </div> -->
+            <button class="btn btn-primary my-2" type="submit">Edit</button>
+          </form>
+          
+          <a href="/trails/<%= foundTrail._id %>">Go back</a>
+        </div>
+      </div>
+
+
+
+      
+
+

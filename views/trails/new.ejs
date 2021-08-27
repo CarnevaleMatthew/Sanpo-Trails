@@ -1,0 +1,84 @@
+<% layout('layouts/boiler') %>
+
+<h1 class="my-3 text-center">Blaze a new Trail</h1>
+
+<div class="row">
+  <div class="col-6 offset-3 mb-3">
+    <form
+      action="/trails"
+      method="POST"
+      class="needs-validation"
+      enctype="multipart/form-data"
+      novalidate
+    >
+      <div class="mb-3">
+        <label class="form-label" for="title">Title</label>
+        <input
+          class="form-control"
+          type="text"
+          name="trail[title]"
+          id="title"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="location">Location</label>
+        <input
+          class="form-control"
+          type="text"
+          name="trail[location]"
+          id="location"
+          required
+        />
+        <div id="ratingHelp" class="form-text">
+          (i.e., Mt. Otake) to increase map accuracy
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="images" class="form-label">Choose image(s)</label>
+        <input class="form-control" type="file" name="image" id="images" multiple>
+        <div id="ratingHelp" class="form-text">
+          Please select only a couple for initial upload
+        </div>
+      </div>
+      <!-- <div class="mb-3">
+        <label class="form-label" for="image">Image</label>
+        <input
+          class="form-control"
+          type="text"
+          name="trail[image]"
+          id="image"
+          required
+        />
+      </div> -->
+      <div class="mb-3">
+        <label class="form-label" for="difficulty">Difficulty</label>
+        <input
+          class="form-control"
+          type="number"
+          name="trail[difficulty]"
+          id="difficulty"
+          min="1"
+          max="5"
+          required
+        />
+        <div id="ratingHelp" class="form-text">
+          1-5
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Description</label>
+        <textarea
+          class="form-control"
+          name="trail[description]"
+          id="description"
+          cols="30"
+          rows="5"
+          required
+        ></textarea>
+      </div>
+      <button class="btn btn-primary my-3" type="submit">Add</button>
+    </form>
+    <a href="/trails">Go back</a>
+  </div>
+</div>

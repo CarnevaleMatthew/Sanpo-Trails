@@ -1,0 +1,30 @@
+<% layout('layouts/boiler') %>
+
+<h1 class="text-center">Register</h1>
+
+<div class="row my-3">
+    <div class="col-6 offset-3">
+        <form action="/register" class="needs-validation" novalidate method="POST">
+   
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" required>
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email address</label>
+                  <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" required>
+                  <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password" id="password" required>
+                </div>
+                <div class="mb-3 form-check">
+                  <input type="checkbox" class="form-check-input" id="newsletter">
+                  <label class="form-check-label" for="newsletter">Sign-up for our newsletter for info on new trails!</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+         
+        </form>
+    </div>
+</div>

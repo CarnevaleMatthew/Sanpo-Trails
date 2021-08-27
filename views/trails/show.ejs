@@ -1,0 +1,161 @@
+<% layout('layouts/boiler') %>
+
+<div class="container d-flex flex-wrap">
+  <div class="row">
+    <div class="col-md-6">
+      
+      <div class="card my-3">
+        <div
+          id="carouselExampleControls"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <% foundTrail.images.forEach((image, i) => { %>
+            <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+              <img src="<%= image.url %> " class="d-block w-100" alt="" />
+            </div>
+            <% }) %>
+          </div>
+          <% if(foundTrail.images.length > 1) { %>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleControls"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleControls"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          <% } %>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title"><%= foundTrail.title %></h5>
+          <p class="card-text"><%= foundTrail.description %></p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            Trail Location: <%= foundTrail.location %>
+          </li>
+          <li class="list-group-item">
+            Trail Difficulty: <%= foundTrail.difficulty %>
+          </li>
+          <li class="list-group-item">
+            Trail Blazed By: <%= foundTrail.author.username %>
+          </li>
+        </ul>
+        <div class="card-body">
+          <a href="/trails" class="card-link">Go Back</a>
+          <% if(currentUser && foundTrail.author.equals(currentUser._id)) { %>
+          <a href="/trails/<%= foundTrail._id %>/edit" class="card-link"
+            >Edit</a
+          >
+          <% } %>
+        </div>
+      </div>
+
+      <% if(currentUser && foundTrail.author.equals(currentUser._id)) { %>
+      <form action="/trails/<%= foundTrail._id %>?_method=DELETE" method="POST">
+        <button class="btn btn-danger btn-sm mb-3" type="submit">DELETE</button>
+      </form>
+      <% } %>
+    </div>
+    <div class="col-md-6">
+      <div id="map" class="my-3" style="width: 100%; height: 300px"></div>
+      <% if(currentUser) { %>
+      <form
+        action="/trails/<%= foundTrail._id %>/comments"
+        method="POST"
+        novalidate
+        class="needs-validation"
+      >
+        <h2 class="text-center">Leave a comment</h2>
+        <div class="mb-3">
+          <label class="form-label" for="rating">Rating</label>
+          <input
+            class="form-control"
+            type="number"
+            name="comment[rating]"
+            id="rating"
+            min="1"
+            max="5"
+            required
+          />
+          <div id="ratingHelp" class="form-text">
+            Please leave a number from 1-5
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="body">Comment</label>
+          <textarea
+            class="form-control"
+            name="comment[body]"
+            id="body"
+            cols="25"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <button class="btn btn-primary btn-sm mb-3">Submit</button>
+      </form>
+      <% } %> <% for (let comment of foundTrail.comments) { %>
+      <div class="card my-3">
+        <div class="card-body">
+          <p class="border-bottom"><%= comment.body %></p>
+          <div class="d-flex justify-content-between">
+            <span class="text-muted mb-2">Rating: <%= comment.rating %></span>
+            <% if(currentUser && comment.author.equals(currentUser._id)) { %>
+            <form
+              action="/trails/<%= foundTrail._id %>/comments/<%= comment._id %>?_method=DELETE"
+              method="POST"
+            >
+              <button class="btn btn-danger btn-sm">X</button>
+            </form>
+            <% } %>
+          </div>
+          <h6 class="card-subtitle mb-2 text-muted">
+            u/<%= comment.author.username %>
+          </h6>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script>
+  const trail = <%- JSON.stringify(foundTrail) %>
+</script>
+
+<script>
+  mapboxgl.accessToken =
+    "pk.eyJ1IjoiY2FybmV2YWxlbWE4OW5ldyIsImEiOiJja3NxNXJibmgwMzN2Mm9tZnBpNHlrdnRkIn0.Rv980Oh7ROpxTADF_lZRPA";
+    const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/streets-v11', // style URL
+    center: trail.geometry.coordinates, // starting position [lng, lat]
+    zoom: 10 // starting zoom
+});
+
+map.addControl(new mapboxgl.NavigationControl());
+
+  // Create a new marker.
+const marker = new mapboxgl.Marker()
+    .setLngLat(trail.geometry.coordinates)
+    .setPopup(
+      new mapboxgl.Popup({offset: 25})
+      .setHTML(
+        `<h3>${trail.title}</h3>`
+      )
+    )
+    .addTo(map);
+</script>

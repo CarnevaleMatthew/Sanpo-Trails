@@ -1,0 +1,30 @@
+<% layout('layouts/boiler') %>
+
+<h1 class="text-center mb-3">All Trails</h1>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <% for(let trail of trails) { %>
+  <div class="col my-3">
+    <div class="card h-100 text-center">
+      <% if(trail.images.length > 0) { %> 
+      <img src="<%= trail.images[0].url %>" class="card-img-top" alt="">
+      <% } %> 
+      <div class="card-body">
+        <h5 class="card-title"><%= trail.title %></h5>
+        <p class="card-text"><%= trail.description.substring(0,40) %>...</p>
+      </div>
+      <div class="card-footer">
+        <a href="/trails/<%= trail._id %>"><small class="text-muted">details</small></a>
+      </div>
+    </div>
+  </div>
+  <% } %>
+</div>
+<div class="mb-3" id="map" style="width: 100%; height: 400px;"></div>
+
+<script>
+  const trails = {features: <%- JSON.stringify(trails) %>}
+</script>
+
+<script src="/js/clusterMap.js"></script>
